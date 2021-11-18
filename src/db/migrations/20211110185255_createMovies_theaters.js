@@ -9,12 +9,13 @@ exports.up = function(knex) {
       table
           .foreign("theater_id")
           .references("theater_id")
-          .inTable("theaters");
-      table.boolean("is_showing");
+          .inTable("theaters")
+      table.boolean("is_showing")
+      table.timestamps(true, true);
     });
   };
   
   exports.down = function(knex) {
-    return knex.schem.dropTable("movies_theaters");
+    return knex.schema.dropTable("movies_theaters");
   };
   

@@ -4,6 +4,7 @@ exports.up = function(knex) {
       table.increments("review_id").primary();
       table.text("content");
       table.integer("score");
+      table.timestamps(true, true);
       table.integer("critic_id").unsigned().notNullable();
       table
         .foreign("critic_id")

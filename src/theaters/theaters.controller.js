@@ -1,30 +1,35 @@
-const theaters = [
-    {
-        name: "Regal City Center",
-        address_line_1: "801 C St.",
-        address_line_2: "",
-        city: "Vancouver",
-        state: "WA",
-        zip: "98660",
-      },
-      {
-        name: "Hollywood Theatre",
-        address_line_1: "4122 NE Sandy Blvd.",
-        address_line_2: "",
-        city: "Portland",
-        state: "OR",
-        zip: "97212",
-      },
-      {
-        name: "Regal Tigard",
-        address_line_1: "11626 SW Pacific Hwy",
-        address_line_2: "",
-        city: "Tigard",
-        state: "OR",
-        zip: "97223",
-      }
-];
+const errorBoundary = require("../errors/asyncErrorBoundary");
+const service = require("./theaters.service");
+const reduceProperties = require("../utils/reduce-properties");
+const configuration={
+  movie_id: ["movies", null, "movie_id"],
+  title: ["movies", null, "title"],
+  runtime_in_minutes: ["movies", null, "runtime_in_minutes"],
+  rating: ["movies", null, "rating"],
+  description: ["movies", null, "description"],
+  image_url: ["movies", null, "image_url"],
+  created_at: ["movies", null, "created_at"],
+  updated_at: ["movies", null, "updated_at"],
+  is_showing: ["movies", null, "is_showing"],
+  theater_id: ["movies", null, "theater_id"]
+};
 
-function list (req, res, next){
-    res.
+
+
+async function list (req, res, next){
+    const {movieId}= req.params;
+    let theaters;
+    if(movieId){
+      theaters = await service.listByMovie(movieId);
+    }else{
+      const response= await service.list();
+      const reduceMovies = reduceProperties("theater_id", configuration);
+      theaters= reduceMovies(response);
+    }
+    
+    res.status(200).json({data: theaters});
 }
+
+module.exports={
+    list: [errorBoundary(list)]
+};

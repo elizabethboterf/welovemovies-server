@@ -1,7 +1,6 @@
 const knex = require("../db/connection");
 
 function list(){
-    console.log(knex("movies").select("*"));
     return knex("movies").select("*");
 }
 
@@ -12,7 +11,15 @@ function read(movieId){
     .first();
 }
 
+function listIsShowing(){
+    return knex("movies as m")
+        .join("movies_theaters as mt", "mt.movie_id", "m.movie_id")
+        .select("m.*")
+        .where({"mt.is_showing": true});
+}
+
 module.exports={
+    listIsShowing,
     list,
     read
 };
