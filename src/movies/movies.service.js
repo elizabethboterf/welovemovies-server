@@ -1,3 +1,4 @@
+const { groupBy } = require("lodash");
 const knex = require("../db/connection");
 
 function list(){
@@ -15,7 +16,8 @@ function listIsShowing(){
     return knex("movies as m")
         .join("movies_theaters as mt", "mt.movie_id", "m.movie_id")
         .select("m.*")
-        .where({"mt.is_showing": true});
+        .where({"mt.is_showing": true})
+        .groupBy("m.movie_id");
 }
 
 module.exports={

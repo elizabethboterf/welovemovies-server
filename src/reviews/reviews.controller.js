@@ -1,28 +1,16 @@
 const errorBoundary = require("../errors/asyncErrorBoundary");
 const service= require("./reviews.service");
-const reduceProperties = require("../utils/reduce-properties");
 const mapProperties = require("../utils/map-properties");
 
-const configuration = {
-    critic_id:  ["critic",null,"critic_id"],
-    preferred_name: ["critic", null, "preferred_name"],
-    surname: ["critic", null, "surname"],
-    organization_name: ["critic", null, "organization_name"],
+const config = {
+    preferred_name: "critic.preferred_name",
+    surname: "critic.surname",
+    organization_name: "critic.organization_name"
 };
-
-const reduceReviews = reduceProperties("review_id", configuration);
-const nonArray = (reviews)=>{
-    const reduced = reduceReviews(reviews)
-    const finished= reduced.map((review)=>{
-        const critic = review.critic;
-        return ({
-            ...review,
-            critic: critic[0]
-        });
-    });
-    return finished;
+const addCritic= mapProperties(config);
+const addCriticArray= (array)=>{
+    return array.map((item)=>addCritic(item));
 };
-
 
 //middleware
 async function ifExists(req, res, next){
@@ -69,8 +57,7 @@ async function list(req, res){
     }else{
         reviews = await service.list();
     }
-    //console.log(reviews);
-    reviews=nonArray(reviews);
+    reviews=addCriticArray(reviews);
     res.status(200).json({data: reviews});
 }
 
@@ -78,13 +65,12 @@ async function update(req, res){
     const {score, content, review}= res.locals;
     const newReview={
         ...review,
-        score: score,
-        content: content
+        ...req.body.data,
+        review_id: review.review_id
     };
-    const response = await service.update(newReview);
-    console.log(repsonse);
-    const data= nonArray(response);
-    res.status(200).json({data: data});
+    const data= await service.update(newReview);
+    const formatReview = addCritic(data);
+    res.status(200).json({data: formatReview});
 }
 
 async function destroy(req, res){

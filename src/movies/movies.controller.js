@@ -19,6 +19,7 @@ async function list (req, res, next){
     console.log(is_showing);
     if(is_showing){
       movies = await service.listIsShowing();
+      console
     }else{
       movies = await service.list();
     }
