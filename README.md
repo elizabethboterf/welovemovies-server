@@ -21,4 +21,4 @@ A webiste for listing movies and their showings at different theaters.
 
 -> Theaters Page
 
-![theaters](https://user-images.githubusercontent.com/85326605/143319045-7d7add21-b46e-423c-9a3a-549281ceba5c.jpeg)
+![theaters page](https://user-images.githubusercontent.com/85326605/143319475-539b03b8-c942-4558-95a1-cb60b5b31ee1.jpeg)
