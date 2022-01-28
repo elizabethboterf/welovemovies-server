@@ -1,5 +1,5 @@
 # welovemovies-server
-A webiste for listing movies and their showings at different theaters.
+This is an app designed to provide a user with available movie viewings within a group of theaters. The dashboard lists the movies that are now showing by their poster and title. When the user clicks a movie, the user is directed to a page that details the summary, runtime, average rating, and theaters holding showings as well as a list of reviews for the movie. The user can find a list of movies and their details (without the reviews) from the "movies" tab. From the "theaters" tab, the user can see a list of each theater paired with its address and a list of movies its showing. 
 
 ---
 ## Link
